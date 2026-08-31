@@ -8,6 +8,9 @@ if typing.TYPE_CHECKING:
     from biscuit.api import ExtensionsAPI
 
 
-def setup(api: ExtensionsAPI) -> None:
+def setup(api: ExtensionsAPI) -> ThunderClient:
     """Entrypoint for Biscuit to load the extension."""
-    api.register("thunder_client", ThunderClient(api))
+    ext = ThunderClient(api)
+    api.register("thunder_client", ext)
+    ext.install()
+    return ext

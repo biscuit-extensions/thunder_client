@@ -1,0 +1,7 @@
+[extension]
+id = "thunder_client"
+name = "Thunder Client"
+version = "0.1.0"
+description = "Lightweight GUI REST API client with request runner and collections"
+author = "biscuit-extensions"
+icon = "icon.png"

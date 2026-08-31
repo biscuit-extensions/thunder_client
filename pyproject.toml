@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "thunder_client"
+version = "0.1.0"
+description = "Lightweight GUI REST API client with request runner and collections"
+authors = ["biscuit-extensions"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+biscuit-editor = "^3.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

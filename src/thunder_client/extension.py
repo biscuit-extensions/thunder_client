@@ -227,13 +227,45 @@ class ThunderClient(Extension):
 
     def format_response(
         self,
-        status: int,
-        data: str,
+        status: int | dict | Any,
+        data: str | None = None,
         headers: dict[str, str] | None = None,
         latency_ms: float = 0.0,
         reason: str = "",
     ) -> dict[str, Any]:
         """Format response into structured payload with formatted body and metrics."""
+        if isinstance(status, dict):
+            resp = status
+            status_code = resp.get("status_code", resp.get("status", 200))
+            data_val = resp.get("body", resp.get("data", resp.get("text", "")))
+            headers_val = resp.get("headers", headers or {})
+            latency_val = resp.get("latency_ms", latency_ms)
+            reason_val = resp.get("reason", reason)
+            return self.format_response(
+                status=status_code,
+                data=data_val,
+                headers=headers_val,
+                latency_ms=latency_val,
+                reason=reason_val,
+            )
+        elif hasattr(status, "status_code"):
+            resp = status
+            status_code = getattr(resp, "status_code", 200)
+            data_val = getattr(resp, "text", getattr(resp, "body", ""))
+            headers_val = getattr(resp, "headers", headers or {})
+            latency_val = getattr(resp, "latency_ms", latency_ms)
+            reason_val = getattr(resp, "reason", reason)
+            return self.format_response(
+                status=status_code,
+                data=data_val,
+                headers=headers_val,
+                latency_ms=latency_val,
+                reason=reason_val,
+            )
+
+        if data is None:
+            data = ""
+
         formatted_body = data
         is_json = False
         try:
